@@ -5,14 +5,11 @@ from google.genai import types  # noqa: F401
 
 from livekit.agents import Agent, AgentServer, AgentSession, JobContext, JobProcess, cli
 from livekit.plugins import deepgram, google, openai, silero  # noqa: F401
-
+from interrupt_gate import InterruptGate
 
 
 IGNORE_WORDS = {"yeah", "ok", "okay", "hmm", "uh-huh", "right"}
 INTERRUPT_WORDS = {"stop", "wait", "no", "cancel", "hold"}
-
-
-
 
 
 
@@ -54,6 +51,8 @@ async def entrypoint(ctx: JobContext):
         #     input_audio_transcription=None,
         # ),
     )
+    gate = InterruptGate(session)
+    
     await session.start(agent=SemanticInterruptAgent(instructions="You are a helpful assistant."), room=ctx.room)
 
 
