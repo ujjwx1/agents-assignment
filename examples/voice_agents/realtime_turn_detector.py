@@ -5,29 +5,14 @@ from google.genai import types  # noqa: F401
 
 from livekit.agents import Agent, AgentServer, AgentSession, JobContext, JobProcess, cli
 from livekit.plugins import deepgram, google, openai, silero  # noqa: F401
-from semantic_turn_detector import SemanticTurnDetector
+
 
 
 IGNORE_WORDS = {"yeah", "ok", "okay", "hmm", "uh-huh", "right"}
 INTERRUPT_WORDS = {"stop", "wait", "no", "cancel", "hold"}
 
 
-class SemanticInterruptAgent(Agent):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
-    async def on_user_message(self, message: str, session: AgentSession):
-        text = message.lower()
-
-        if any(word in text for word in INTERRUPT_WORDS):
-            await session.interrupt()   # HARD STOP
-            return message
-
-        if session.is_speaking and all(word in IGNORE_WORDS for word in text.split()):
-            # Ignore backchanneling while speaking
-            return None
-
-        return message
 
 
 
@@ -47,7 +32,7 @@ server = AgentServer()
 @server.rtc_session()
 async def entrypoint(ctx: JobContext):
     session = AgentSession(
-        allow_interruptions=False,
+        allow_interruptions=True,
         turn_detection=SemanticTurnDetector(),
         vad=ctx.proc.userdata["vad"],
         stt=deepgram.STT(),
