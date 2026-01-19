@@ -23,7 +23,7 @@ server = AgentServer()
 @server.rtc_session()
 async def entrypoint(ctx: JobContext):
     session = AgentSession(
-        allow_interruptions=True,
+        allow_interruptions=False,
         turn_detection=MultilingualModel(),
         vad=ctx.proc.userdata["vad"],
         stt=deepgram.STT(),
