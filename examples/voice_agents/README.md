@@ -1,5 +1,22 @@
 # Voice Agents Examples
 
+
+---
+
+## ⚠️ Assignment Submission (Important)
+
+This repository includes an **assignment-specific implementation of semantic, state-aware
+interruption handling** as required by the campus assignment.
+
+👉 **Start here:**  
+- **Code:** `examples/voice_agents/realtime_turn_detector.py`  
+- **Logic:** `semantic_turn_detector.py`  
+- **Explanation:** Scroll to **“Assignment: Intelligent Interruption Handling”** at the end of this README.
+
+This section explains the design, behavior, and how the requirements are satisfied.
+
+---
+
 This directory contains a comprehensive collection of voice-based agent examples demonstrating various capabilities and integrations with the LiveKit Agents framework.
 
 ## 📋 Table of Contents
@@ -76,3 +93,58 @@ This directory contains a comprehensive collection of voice-based agent examples
 - [LiveKit Agents Documentation](https://docs.livekit.io/agents/)
 - [Agents Starter Example](https://github.com/livekit-examples/agent-starter-python)
 - [More Agents Examples](https://github.com/livekit-examples/python-agents-examples)
+
+---
+
+## 🧠 Assignment: Intelligent Interruption Handling
+
+### Problem
+In voice conversations, users often provide short backchannel utterances such as
+“yeah”, “ok”, or “hmm” while an agent is speaking.  
+Default VAD-based interruption handling incorrectly treats these as true interruptions,
+causing the agent to stop speaking mid-response.
+
+This breaks conversational flow and results in a poor user experience.
+
+---
+
+### Solution
+This solution implements a **semantic, state-aware interruption policy** using LiveKit’s
+turn detection system.
+
+Key principles:
+- Voice Activity Detection (VAD) is left completely unchanged.
+- Interruption decisions are made in **text space**, using STT output.
+- Backchannel utterances are ignored **only while the agent is speaking**.
+- Explicit interruption commands (e.g., “stop”, “wait”, “no”) immediately interrupt the agent.
+- No pause/resume or buffering logic is used.
+
+---
+
+### How It Works
+A custom `SemanticTurnDetector` extends LiveKit’s `MultilingualModel` and overrides the
+turn decision logic.
+
+- While the agent is speaking:
+  - Pure backchannel utterances do **not** trigger a turn.
+  - Interruption commands immediately trigger a turn.
+- When the agent is silent:
+  - All user input is handled normally.
+
+Because the logic is implemented inside the turn detection layer, the solution is
+deterministic, low-latency, and does not interfere with audio playback.
+
+---
+
+### Why This Meets the Requirements
+- No VAD kernel modification
+- No pause / resume or stutter
+- State-aware handling of short utterances
+- Modular, configurable logic
+- Fully aligned with LiveKit’s agent architecture
+
+---
+
+### How to Run
+```bash
+python examples/voice_agents/realtime_turn_detector.py
