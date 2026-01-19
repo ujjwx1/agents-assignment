@@ -7,6 +7,11 @@ from livekit.agents import Agent, AgentServer, AgentSession, JobContext, JobProc
 from livekit.plugins import deepgram, google, openai, silero  # noqa: F401
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
+
+IGNORE_WORDS = {"yeah", "ok", "okay", "hmm", "uh-huh", "right"}
+INTERRUPT_WORDS = {"stop", "wait", "no", "cancel", "hold"}
+
+
 logger = logging.getLogger("realtime-turn-detector")
 logger.setLevel(logging.INFO)
 
