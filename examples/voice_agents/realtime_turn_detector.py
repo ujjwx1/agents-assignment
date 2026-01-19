@@ -69,7 +69,7 @@ async def entrypoint(ctx: JobContext):
         #     input_audio_transcription=None,
         # ),
     )
-    await session.start(agent=Agent(instructions="You are a helpful assistant."), room=ctx.room)
+    await session.start(agent=SemanticInterruptAgent(instructions="You are a helpful assistant."), room=ctx.room)
 
 
 def prewarm(proc: JobProcess):
