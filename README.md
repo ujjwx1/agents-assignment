@@ -446,5 +446,3 @@ deterministic, low-latency, and does not interfere with audio playback.
 ### How to Run
 ```bash
 python examples/voice_agents/realtime_turn_detector.py
-
-<!--END_REPO_NAV-->
