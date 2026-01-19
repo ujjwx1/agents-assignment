@@ -5,7 +5,7 @@ from google.genai import types  # noqa: F401
 
 from livekit.agents import Agent, AgentServer, AgentSession, JobContext, JobProcess, cli
 from livekit.plugins import deepgram, google, openai, silero  # noqa: F401
-from livekit.plugins.turn_detector.multilingual import MultilingualModel
+from semantic_turn_detector import SemanticTurnDetector
 
 
 IGNORE_WORDS = {"yeah", "ok", "okay", "hmm", "uh-huh", "right"}
@@ -48,7 +48,7 @@ server = AgentServer()
 async def entrypoint(ctx: JobContext):
     session = AgentSession(
         allow_interruptions=False,
-        turn_detection=MultilingualModel(),
+        turn_detection=SemanticTurnDetector(),
         vad=ctx.proc.userdata["vad"],
         stt=deepgram.STT(),
         # To use OpenAI Realtime API
