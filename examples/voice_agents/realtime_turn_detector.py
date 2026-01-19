@@ -33,7 +33,7 @@ async def entrypoint(ctx: JobContext):
             # it's necessary to turn off turn detection in the OpenAI Realtime API in order to use
             # LiveKit's turn detection model
             turn_detection=None,
-            input_audio_transcription=None,  # we use Deepgram STT instead
+            input_audio_transcription=True,  # we use Deepgram STT instead
         ),
         # To use Gemini Live API
         # llm=google.realtime.RealtimeModel(
